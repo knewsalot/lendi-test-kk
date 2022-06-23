@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { AppCtx, AppointmentContextType } from '../Root';
 
 const Wrapper = styled.div`
   background-color: #e7e7e7;
@@ -12,10 +13,14 @@ const Wrapper = styled.div`
 `;
 
 const Navigation = () => {
+  const { appointment } = useContext(AppCtx) as AppointmentContextType
+
   return (
     <Wrapper>
       <strong>
-        Currently selected appointment: [appointment date] with [broker name]
+        {
+          appointment.date && appointment.name && <div>Currently selected appointment: {appointment.date} with {appointment.name}</div>
+        }
       </strong>
       <strong>Welcome to Lendi</strong>
     </Wrapper>

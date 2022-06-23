@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, createContext } from "react";
 import styled from "styled-components";
 
 import Navigation from "./Navigation";
@@ -26,14 +26,34 @@ const Heading = styled.strong.attrs({ role: "heading", level: 1 })`
   margin-top: 20px;
 `;
 
+// added name as an afterthought for completeting step 4... 
+export interface AppointmentContext {
+  id: number,
+  brokerId: number,
+  date: string,
+  name: string
+}
+
+export type AppointmentContextType = {
+  appointment: AppointmentContext,
+  updateAppointment: (appt : AppointmentContext) => void,
+  resetAppointment: () => void,
+}
+
+export let AppCtx = createContext<AppointmentContextType | null>(null);
+
 const Root = () => {
+  const [currentAppointment, setCurrentAppointment] = useState({} as AppointmentContext)
+  
   return (
     <Wrapper>
-      <Navigation />
-      <Content>
-        <Heading>Amazing site</Heading>
-        <AppointmentSelect />
-      </Content>
+      <AppCtx.Provider value={ { appointment: currentAppointment, updateAppointment: (apt) => setCurrentAppointment(apt), resetAppointment: () => setCurrentAppointment({} as AppointmentContext)} }>
+        <Navigation />
+        <Content>
+          <Heading>Amazing site</Heading>
+          <AppointmentSelect />
+        </Content>
+      </AppCtx.Provider>
     </Wrapper>
   );
 };

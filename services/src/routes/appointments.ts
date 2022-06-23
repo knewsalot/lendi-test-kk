@@ -12,6 +12,25 @@ const router = Router();
 
 export default router;
 
+// ### Task 5: Modify the appointments API to sort by date in a descending order then by broker id in ascending order
+
 router.get("/", (req, res) => {
-  res.send(appointments);
+  // sorts based on DateTime difference between objects, as original date is defined as a string.
+  // then sorts based on brokerId in ascending order.
+  // descending (b - a), ascending (a - b)
+  let apts = appointments
+
+  apts.sort((a, b) => { 
+    // re-arrange into something legible for the date type (yyyy-mm-dd)
+    let aSplit = a.date.split("/")
+    let bSplit = b.date.split("/")
+    // convert the parts into strings - and account for Month evaluating from 0 (0 - 11 rather than 1 - 12)
+    const aTime = new Date(Number.parseInt(aSplit[2]), Number.parseInt(aSplit[1])-1, Number.parseInt(aSplit[0]))
+    const bTime = new Date(Number.parseInt(bSplit[2]), Number.parseInt(bSplit[1])-1, Number.parseInt(bSplit[0]))
+    return bTime.getTime() - aTime.getTime()
+  }).sort((a, b) => {
+    return a.brokerId - b.brokerId
+  })
+
+  res.send(apts);
 });
